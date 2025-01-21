@@ -66,6 +66,15 @@ If NTH is negative, the NTH value from the end is returned."
 ;; (pseudo-plist-get '(:foo 1 :foo 2 :bar nil :foo 4) :foo nil nil 2)
 ;; (pseudo-plist-get '(:foo 1 :foo 2 :bar nil :foo 4) :foo nil nil -3)
 
+(defun pseudo-plist-get-first (plist key &optional keywordp keyword-eq)
+  "Just like (`pseudo-plist-get` PLIST KEY KEYWORDP KEYWORD-EQ), but only return the first value or nil."
+  (pseudo-plist-get plist key keywordp keyword-eq 0))
+
+(defun pseudo-plist-get-last (plist key &optional keywordp keyword-eq)
+  "Just like (`pseudo-plist-get` PLIST KEY KEYWORDP KEYWORD-EQ), but only return the last value or nil."
+  (pseudo-plist-get plist key keywordp keyword-eq -1))
+
+
 (defun pseudo-plist-remove (plist key &optional keywordp keyword-eq)
   "Remove all elements with KEY from pseudo-plist PLIST."
   (cl-check-type plist list)
