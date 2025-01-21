@@ -28,6 +28,26 @@
 
 (require 'cl-lib)
 
+(defun pseudo-plist-contains-key? (plist key &optional keywordp keyword-eq)
+  "Check if pseudo-plist PLIST has KEY."
+  (cl-check-type plist list)
+  (let ((keywordp (or keywordp #'keywordp))
+        (keyword-eq (or keyword-eq #'eq)))
+    (cl-assert (funcall keywordp key) nil "KEY must be a keyword")
+    (cl-loop
+     for el in plist
+     do (when (and (funcall keywordp el) (funcall keyword-eq el key))
+          (cl-return el)))))
+
+;; (cl-assert (not (null (pseudo-plist-contains-key? '(:foo 1 :foo) :foo))))
+;; (cl-assert (null (pseudo-plist-contains-key? '(:foo 1 :foo) :bar)))
+
+(defalias #'pseudo-plist-member #'pseudo-plist-contains-key?)
+
+;; (cl-assert (not (null (pseudo-plist-member '(:foo 1 :foo) :foo))))
+;; (cl-assert (null (pseudo-plist-member '(:foo 1 :foo) :bar)))
+
+
 (defun pseudo-plist-get (plist key &optional keywordp keyword-eq nth)
   "Get all values for KEY from pseudo-plist PLIST as a list.
 
